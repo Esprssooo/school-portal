@@ -33,10 +33,30 @@ class Student(User):
         self.section = None
         self.year = year
         self.semester = semester
-        self.subjects = []
-        self.balance = 0.0
+        self.subjects = {}
+        self.balance = 0.00
+        self.gwa = 0.00
 
         Student.student_id += 1
+
+    def view_grades(self):
+        for subject, grade in self.subjects.items():
+            print(f"{subject}: {grade}")
+
+    def view_balance(self):
+        print(f"Balance: ₱{self.balance}")
+
+    def compute_gwa(self):
+        if self.subjects:
+            total = 0
+
+            for grade in self.subjects.values():
+                total += grade
+
+            self.gwa = round(total / len(self.subjects), 2)
+
+    def view_gwa(self):
+        print(f"GWA: {self.gwa}")
 
 
 stu = Student(
@@ -47,6 +67,11 @@ stu = Student(
     2,
     1,
 )
+stu.subjects = {"OOP": 98, "IML": 92, "IPS": 97}
+stu.view_grades()
+stu.view_balance()
+stu.compute_gwa()
+stu.view_gwa()
 
 a = Student(
     "a",
