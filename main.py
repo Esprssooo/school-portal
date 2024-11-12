@@ -5,6 +5,30 @@
 # 2. Encapsulation
 # 3. Inheritance
 # 4. Polymorphism
+# programs = [
+#     {
+#         "program_name": "Bachelor of Science in Computer Science",
+#         "program_abbrev": "BSCS",
+#     },
+#     {
+#         "program_name": "Bachelor of Science in Information Technology",
+#         "specialization": "Mobile Development",
+#         "program_abbrev": "BSIT - Mob Dev",
+#     },
+#     {
+#         "program_name": "Bachelor of Science in Information Technology",
+#         "specialization": "Network Administration",
+#         "program_abbrev": "BSCS - Net Ad",
+#     },
+#     {
+#         "program_name": "Bachelor of Science in Entertainment and Multimedia Computing",
+#         "program_abbrev": "BSEMC",
+#     },
+#     {
+#         "program_name": "Associate in Computer Technology",
+#         "program_abbrev": "ACT",
+#     },
+# ]
 
 
 class User:
@@ -25,37 +49,40 @@ class Student(User):
         last_name,
         username,
         password,
-        year,
+        program,
+        year_level,
         semester,
     ):
         super().__init__(first_name, last_name, username, password)
         self.student_id = Student.student_id
+        self.program = program
         self.section = None
-        self.year = year
+        self.year_level = year_level
         self.semester = semester
-        self.subjects = {}
+        self.grades = {}
         self.balance = 0.00
         self.gwa = 0.00
 
         Student.student_id += 1
 
     def view_grades(self):
-        for subject, grade in self.subjects.items():
+        for subject, grade in self.grades.items():
             print(f"{subject}: {grade}")
 
     def view_balance(self):
         print(f"Balance: ₱{self.balance}")
 
     def compute_gwa(self):
-        if self.subjects:
+        if self.grades:
             total = 0
 
-            for grade in self.subjects.values():
+            for grade in self.grades.values():
                 total += grade
 
-            self.gwa = round(total / len(self.subjects), 2)
+            self.gwa = round(total / len(self.grades), 2)
 
     def view_gwa(self):
+        self.compute_gwa()
         print(f"GWA: {self.gwa}")
 
 
@@ -64,6 +91,7 @@ stu = Student(
     "b",
     "test",
     "yes",
+    "Bachelor of Science in Computer Science",
     2,
     1,
 )
@@ -78,11 +106,13 @@ a = Student(
     "b",
     "test",
     "yes",
+    "Bachelor of Science in Information Technology",
     2,
     1,
 )
 
 print(stu.student_id, a.student_id)
+print(stu.course, a.course)
 
 
 # classes = {"subject": [sections]}
@@ -95,10 +125,14 @@ class Faculty(User):
 # class Class:
 
 
-# class Section:
-#     def __init__(self, section_name, students):
-#         self.section_name = section_name
-#         self.students = students
+class Section:
+    def __init__(self, year_level, semester, students, subjects):
+        section_name = f"CCIS{year_level - 1 + semester}"
+        # if program
+        # self.section_name = section_name
+        self.students = students
+        self.subjects = subjects
+
 
 # class Profile:
 #     def __init__(self):
