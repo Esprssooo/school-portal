@@ -39,6 +39,15 @@ class User:
         self.username = username
         self.password = password
 
+    def register():
+        pass
+
+    def login():
+        pass
+
+    def logout():
+        pass
+
 
 class Student(User):
     student_id = 1
@@ -95,7 +104,7 @@ stu = Student(
     2,
     1,
 )
-stu.subjects = {"OOP": 98, "IML": 92, "IPS": 97}
+stu.grades = {"OOP": 98, "IML": 92, "IPS": 97}
 stu.view_grades()
 stu.view_balance()
 stu.compute_gwa()
@@ -112,14 +121,22 @@ a = Student(
 )
 
 print(stu.student_id, a.student_id)
-print(stu.course, a.course)
+print(stu.program, a.program)
 
 
 # classes = {"subject": [sections]}
 class Faculty(User):
-    def __init__(self, faculty_id, classes):
+    faculty_id_counter = 1
+
+    def __init__(self, first_name, last_name, username, password, faculty_id, classes):
+        super().__init__(first_name, last_name, username, password)
         self.faculty_id = faculty_id
         self.classes = classes
+
+    def view_classes(self):
+        print(f"{self.full_name} is handling the following classes:")
+        for cls in self.classes:
+            print(f"- {cls}")
 
 
 # class Class:
