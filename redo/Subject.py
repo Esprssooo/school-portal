@@ -6,11 +6,39 @@ class Subject:
         self.tuition_per_unit = tuition_per_unit
         self.instructor = instructor
 
+    # def refresh_student_subjects(self, student):
+    #     for subject in student.subjects:
+    #         subject_code = subject.subject_code
+    #         student.grades[subject_code] = {
+    #             "Prelim": None,
+    #             "Midterm": None,
+    #             "Final": None,
+    #             "Average": None,
+    #             "Grade": None,
+    #         }
+
     def add_subject(self, student):
-        student.subjects.append(self)
+        if self not in student.subjects:
+            student.subjects.append(self)
+            # self.refresh_student_subjects(student)
+            for subject in student.subjects:
+                subject_code = subject.subject_code
+                student.grades[subject_code] = {
+                    "Prelim": None,
+                    "Midterm": None,
+                    "Final": None,
+                    "Average": None,
+                    "Grade": None,
+                }
+        else:
+            print("You are already enrolled in this subject.")
 
     def drop_subject(self, student):
-        student.subjects.remove(self)
+        if self in student.subjects:
+            student.subjects.remove(self)
+            del student.grades[self.subject_code]
+        else:
+            print("You are not enrolled in this subject.")
 
     def view_details(self):
-        return f"{[self.subject_code] - {self.subject_name}}\n  Units: {self.units}\n  Instructor: {self.instructor}"
+        return f"{[self.subject_code]} - {self.subject_name}\n  Units: {self.units}\n  Instructor: {self.instructor.full_name}"

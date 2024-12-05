@@ -12,5 +12,14 @@ class Section:
     def add_subject(self, subject):
         self.subjects.append(subject)
 
-    def set_subjects(self, subjects):
-        self.subjects = subjects
+    def view_student_list(self):
+        if self.students:
+            student_list = f"{self.section_name} students:"
+            for student in self.students:
+                student_list += f"\n  {student.last_name}, {student.first_name}"
+            return student_list
+        else:
+            return f"No students enrolled."
+
+    # def set_subjects(self, subjects):
+    #     self.subjects = subjects

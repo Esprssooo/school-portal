@@ -2,10 +2,12 @@ from User import User
 
 
 class Student(User):
-    def __init__(self, first_name, last_name, student_count, section):
-        user_id = f"S{student_count}"
+    def __init__(self, first_name, last_name, student_id, program, section):
+        # user_id = f"S{student_count}"
+        user_id = student_id
         super().__init__(first_name, last_name, "student", user_id)
         self.student_id = user_id
+        self.program = program
         self.section = section
         self.year = section.year
         self.semester = section.semester
@@ -34,18 +36,45 @@ class Student(User):
             print("No subjects enrolled. Add subjects first.")
 
     def view_balance(self):
+        self.calculate_balance()
         return f"Balance: {self.balance}"
 
+    def view_subjects(self):
+        if self.subjects:
+            subjects = "Subjects:"
+            for subject in self.subjects:
+                subjects += f"\n  [{subject.subject_code}] {subject.subject_name}\n    Units: {subject.units}\n    Instructor: {subject.instructor.full_name}"
+                subjects += "\n"
+            return subjects
+        else:
+            return f"No subjects enrolled."
+
     def view_grades(self):
-        grades_message = "Grades:"
-        for subject_code, periods in self.grades.items():
-            grades_message += f"\n  [{subject_code}]:"
+        if self.grades:
+            grades = "Grades:"
+            for subject_code, periods in self.grades.items():
+                grades += f"\n  [{subject_code}]:"
+                for period, grade in periods.items():
+                    grades += f"\n    {period}: {grade}"
 
-            for period, grade in periods.items():
-                grades_message += f"\n    {period}: {grade}"
+                grades += "\n"
+                print(self.calculate_subject_average(subject_code))
+            return grades
+        else:
+            return f"No subjects enrolled."
 
-            grades_message += "\n"
-        return grades_message
+        # if self.grades:
+        #     grades = "Grades:"
+        #     for subject_code, periods in self.grades.items():
+        #         grades += f"\n  [{subject_code}]:"
+
+        #         for period, grade in periods.items():
+        #             grades += f"\n    {period}: {grade}"
+
+        #         grades += "\n"
+        #     return grades
+        # else:
+        #     return f"No subjects enrolled."
 
     def calculate_subject_average(self, subject_code):
         if subject_code not in self.grades:
@@ -62,3 +91,45 @@ class Student(User):
             return average
         else:
             return "Grades incomplete."
+
+    def dashboard(self):
+        while True:
+            print("\n-------- SPCF Portal --------")
+            print("[1] View Subjects")
+            print("[2] View Grades")
+            print("[3] View Balance")
+            print("[4] View Profile")
+            print("[5] Edit Profile")
+            print("[6] Reset Profile")
+            print("[7] Change Password")
+            print("[0] Logout")
+            menu_option = input("Choose a menu option [1, 0]: ")
+            print()
+
+            if menu_option == "1":
+                print(self.view_subjects())
+
+            elif menu_option == "2":
+                print(self.view_grades())
+
+            elif menu_option == "3":
+                print(self.view_balance())
+
+            elif menu_option == "4":
+                print(self.view_balance())
+
+            elif menu_option == "5":
+                print(self.view_balance())
+
+            elif menu_option == "6":
+                print(self.view_balance())
+
+            elif menu_option == "7":
+                self.change_password()
+
+            elif menu_option == "0":
+                self.logout()
+                break
+
+            else:
+                print("Invalid option, please try again.")
