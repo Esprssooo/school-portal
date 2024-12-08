@@ -18,31 +18,34 @@ for section_data in sections_data:
     portal.add_section(section)
 
     # create faculty objects
-    for subject in section_data["subjects"]:
-        if subject["instructor"]["faculty_id"] not in portal.faculties:
+    for subject_data in section_data["subjects"]:
+        if subject_data["instructor"]["faculty_id"] not in portal.faculties:
             faculty = Faculty(
-                subject["instructor"]["first_name"],
-                subject["instructor"]["last_name"],
-                subject["instructor"]["faculty_id"],
+                subject_data["instructor"]["first_name"],
+                subject_data["instructor"]["last_name"],
+                subject_data["instructor"]["faculty_id"],
             )
             # faculty_id_counter += 1
             portal.add_faculty(faculty)
         else:
-            faculty = portal.faculties[subject["instructor"]["faculty_id"]]
+            faculty = portal.faculties[subject_data["instructor"]["faculty_id"]]
 
         # create subject objects
         subject = Subject(
-            subject["subject_code"],
-            subject["subject_name"],
-            subject["units"],
-            subject["tuition_per_unit"],
+            subject_data["subject_code"],
+            subject_data["subject_name"],
+            subject_data["units"],
+            subject_data["tuition_per_unit"],
             faculty,
         )
         section.add_subject(subject)
 
-        if subject not in faculty.classes:
-            faculty.classes[subject] = []
-        faculty.classes[subject].append(section)
+        if subject.subject_name not in faculty.classes:
+            faculty.classes[subject.subject_name] = []
+        faculty.classes[subject.subject_name].append(section)
+        # if subject not in faculty.classes:
+        #     faculty.classes[subject] = []
+        # faculty.classes[subject].append(section)
 
     # create student objects
     for student in section_data["students"]:
@@ -56,6 +59,19 @@ for section_data in sections_data:
         # student_id_counter += 1
         section.add_student(student)
         portal.add_student(student)
+
+portal.students["S2"].grades["PROG1L"]["Prelim"] = 97.65
+portal.students["S2"].grades["PROG1L"]["Midterm"] = 98.95
+portal.students["S2"].grades["PROG1L"]["Final"] = 98.99
+portal.students["S2"].grades["ITC"]["Prelim"] = 88
+portal.students["S2"].grades["ITC"]["Midterm"] = 90
+portal.students["S2"].grades["ITC"]["Final"] = 94
+# for grade, test in portal.students["S2"].grades.items():
+#     print(grade, test)
+# for klase in portal.faculties["F1"].classes.values():
+#     for x in klase:
+#         if x.section_name == "CCIS3A":
+#             print(x.section_name)
 
 
 while True:

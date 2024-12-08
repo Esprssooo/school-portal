@@ -13,6 +13,7 @@ class Student(User):
         self.semester = section.semester
         self.subjects = section.subjects
         self.grades = {}
+        self.gwa = None
         self.balance = 0.00
 
         for subject in self.subjects:
@@ -54,11 +55,21 @@ class Student(User):
             grades = "Grades:"
             for subject_code, periods in self.grades.items():
                 grades += f"\n  [{subject_code}]:"
+                self.grades[subject_code]["Average"] = self.calculate_subject_average(
+                    subject_code
+                )
+
+                is_grades_complete = True
                 for period, grade in periods.items():
+                    if not grade:
+                        is_grades_complete = False
                     grades += f"\n    {period}: {grade}"
 
                 grades += "\n"
-                print(self.calculate_subject_average(subject_code))
+            if is_grades_complete:
+                grades += f"\nGeneral Weighted Average: {self.compute_gwa()}"
+            else:
+                grades += "\nGeneral Weighted Average: None"
             return grades
         else:
             return f"No subjects enrolled."
@@ -78,7 +89,8 @@ class Student(User):
 
     def calculate_subject_average(self, subject_code):
         if subject_code not in self.grades:
-            return f"{subject_code} not found."
+            print(f"{subject_code} not found.")
+            return
 
         subject_grades = self.grades[subject_code]
         prelim_grade = subject_grades["Prelim"]
@@ -88,9 +100,47 @@ class Student(User):
         if prelim_grade and midterm_grade and final_grade:
             average = round((prelim_grade + midterm_grade + final_grade) / 3)
             subject_grades["Average"] = average
+            subject_grades["Grade"] = self.convert_grades(average)
             return average
+        # else:
+        #     return "Grades incomplete."
+
+    def convert_grades(self, average):
+        if average >= 98:
+            grade = 1.00
+        elif 97 <= average >= 95:
+            grade = 1.25
+        elif 94 <= average >= 92:
+            grade = 1.50
+        elif 91 <= average >= 90:
+            grade = 1.75
+        elif 89 <= average >= 88:
+            grade = 2.00
+        elif 87 <= average >= 85:
+            grade = 2.25
+        elif 84 <= average >= 82:
+            grade = 2.50
+        elif 81 <= average >= 80:
+            grade = 2.75
+        elif 79 <= average >= 75:
+            grade = 3.00
         else:
-            return "Grades incomplete."
+            grade = 5.00
+        return grade
+
+    def compute_gwa(self):
+        gwa = 0
+        for periods in self.grades.values():
+            gwa += periods["Grade"]
+        gwa /= len(self.grades)
+        self.gwa = gwa
+        return gwa
+
+    def has_grade(self, subject, period):
+        return self.grades[subject.subject_code][period] is not None
+
+    def add_grade(self, subject, period, grade):
+        self.grades[subject.subject_code][period] = grade
 
     def dashboard(self):
         while True:
