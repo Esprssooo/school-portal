@@ -1,4 +1,5 @@
 from User import User
+from Subject import Subject
 
 
 class Student(User):
@@ -11,11 +12,23 @@ class Student(User):
         self.section = section
         self.year = section.year
         self.semester = section.semester
-        self.subjects = section.subjects
+        # self.subjects = section.subjects
         self.grades = {}
         self.gwa = None
         self.balance = 0.00
         self.scholarship = None
+
+        self.subjects = []
+        for subject in section.subjects:
+            self.subjects.append(
+                Subject(
+                    subject.subject_code,
+                    subject.subject_name,
+                    subject.units,
+                    subject.tuition_per_unit,
+                    subject.instructor,
+                )
+            )
 
         for subject in self.subjects:
             subject_code = subject.subject_code
@@ -33,7 +46,10 @@ class Student(User):
             for subject in self.subjects:
                 subject_tuition = subject.units * subject.tuition_per_unit
                 total_tuition += subject_tuition
-            self.balance = total_tuition
+            if self.scholarship:
+                self.balance = total_tuition * self.scholarship.discount
+            else:
+                self.balance = total_tuition
         else:
             print("No subjects enrolled. Add subjects first.")
 
@@ -147,9 +163,8 @@ class Student(User):
             gwa = 0
             for periods in self.grades.values():
                 gwa += periods["Grade"]
-            gwa /= len(self.grades)
-            self.gwa = gwa
-            return gwa
+            self.gwa = round(gwa / len(self.grades), 2)
+            return self.gwa
         else:
             return None
 
@@ -159,6 +174,37 @@ class Student(User):
     def add_grade(self, subject_code, period, grade):
         self.grades[subject_code][period] = grade
 
+    def scholarship_process(self, portal):
+        self.calculate_subject_averages()
+        self.compute_gwa()
+        if self.gwa:
+            eligible_scholarships = []
+            for scholarship in portal.scholarships:
+                if scholarship.verify_eligibility(self.gwa):
+                    eligible_scholarships.append(scholarship)
+
+            if eligible_scholarships:
+                best_scholarship = eligible_scholarships[0]
+                print(
+                    f"You are eligible for {best_scholarship.discount * 100}% Discount {best_scholarship.type} Scholarship"
+                )
+                while True:
+                    confirm = input("Would you like to apply for it? [Y/n]: ").lower()
+
+                    if confirm == "n":
+                        break
+                    elif confirm == "y" or confirm == "":
+                        best_scholarship.apply(self)
+                        print(self.view_balance())
+                        break
+                    else:
+                        print("Invalid option.")
+            else:
+                print("Sorry. You are not eligible for any scholarships.")
+
+        else:
+            print("Grades not yet completed.")
+
     def dashboard(self, portal):
         while True:
             print("\n-------- SPCF Portal --------")
@@ -167,9 +213,11 @@ class Student(User):
             print("[3] View Balance")
             print("[4] View Profile")
             print("[5] Apply for Scholarship")
-            print("[6] Change Password")
+            print("[6] Add Subject")
+            print("[7] Drop Subject")
+            print("[8] Change Password")
             print("[0] Logout")
-            menu_option = input("Choose a menu option [1, 0]: ")
+            menu_option = input("Choose a menu option [1, 2, 3, 4, 5, 6, 7, 8, 0]: ")
             print()
 
             if menu_option == "1":
@@ -186,21 +234,26 @@ class Student(User):
                 pass
 
             elif menu_option == "5":
-                self.calculate_subject_averages()
-                # print(self.compute_gwa())
-                if self.gwa:
-                    eligible_scholarships = []
-                    for scholarship in portal.scholarships:
-                        if scholarship.verify_eligibility(self.gwa):
-                            eligible_scholarships.append(scholarship)
-
-                    if not eligible_scholarships:
-                        print("Sorry. You are not eligible for any scholarships.")
-                    print(eligible_scholarships[0].required_gwa)
-                else:
-                    print("Grades not yet completed.")
+                self.scholarship_process(portal)
 
             elif menu_option == "6":
+                self.scholarship_process(portal)
+
+            elif menu_option == "7":
+                print(self.view_subjects())
+                subject_input = input("Enter subject code to drop: ").upper()
+
+                subject_to_drop = None
+                for subject in self.subjects:
+                    if subject.subject_code == subject_input:
+                        subject_to_drop = subject
+                        break
+                if subject_to_drop:
+                    subject.drop_subject(self)
+                else:
+                    print("Subject not found.")
+
+            elif menu_option == "8":
                 self.change_password()
 
             elif menu_option == "0":

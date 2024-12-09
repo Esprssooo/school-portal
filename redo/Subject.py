@@ -37,8 +37,9 @@ class Subject:
         if self in student.subjects:
             student.subjects.remove(self)
             del student.grades[self.subject_code]
-        else:
-            print("You are not enrolled in this subject.")
+            print(f"You have dropped [{self.subject_code}] {self.subject_name}.")
+        # else:
+        #     print("You are not enrolled in this subject.")
 
     def view_details(self):
         return f"{[self.subject_code]} - {self.subject_name}\n  Units: {self.units}\n  Instructor: {self.instructor.full_name}"

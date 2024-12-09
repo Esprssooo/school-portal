@@ -8,7 +8,7 @@ class Scholarship:
         student.scholarship = self
 
     def verify_eligibility(self, gwa):
-        return self.required_gwa >= gwa
+        return gwa <= self.required_gwa
 
-    def deduct_tuition(self):
-        pass
+    def deduct_tuition(self, student):
+        student.view_balance()
