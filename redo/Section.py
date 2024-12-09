@@ -19,7 +19,7 @@ class Section:
                 student_list += f"\n  {student.last_name}, {student.first_name}"
             return student_list
         else:
-            return f"No students enrolled."
+            return "No students enrolled."
 
     # def set_subjects(self, subjects):
     #     self.subjects = subjects

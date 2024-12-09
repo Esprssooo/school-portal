@@ -15,6 +15,7 @@ class Student(User):
         self.grades = {}
         self.gwa = None
         self.balance = 0.00
+        self.scholarship = None
 
         for subject in self.subjects:
             subject_code = subject.subject_code
@@ -48,31 +49,41 @@ class Student(User):
                 subjects += "\n"
             return subjects
         else:
-            return f"No subjects enrolled."
+            return "No subjects enrolled."
+
+    def check_grades_completed(self):
+        for periods in self.grades.values():
+            for grade in periods.values():
+                if not grade:
+                    return False
+        return True
 
     def view_grades(self):
         if self.grades:
             grades = "Grades:"
             for subject_code, periods in self.grades.items():
                 grades += f"\n  [{subject_code}]:"
-                self.grades[subject_code]["Average"] = self.calculate_subject_average(
-                    subject_code
-                )
+                # self.grades[subject_code]["Average"] = self.calculate_subject_average(
+                #     subject_code
+                # )
 
-                is_grades_complete = True
+                # is_grades_complete = True
+                # for period, grade in periods.items():
+                #     if not grade:
+                #         is_grades_complete = False
+                #     grades += f"\n    {period}: {grade}"
+
                 for period, grade in periods.items():
-                    if not grade:
-                        is_grades_complete = False
                     grades += f"\n    {period}: {grade}"
 
                 grades += "\n"
-            if is_grades_complete:
-                grades += f"\nGeneral Weighted Average: {self.compute_gwa()}"
-            else:
-                grades += "\nGeneral Weighted Average: None"
+            # if self.check_grades_completed():
+            grades += f"\nGeneral Weighted Average: {self.compute_gwa()}"
+            # else:
+            #     grades += "\nGeneral Weighted Average: None"
             return grades
         else:
-            return f"No subjects enrolled."
+            return "No subjects enrolled."
 
         # if self.grades:
         #     grades = "Grades:"
@@ -87,23 +98,26 @@ class Student(User):
         # else:
         #     return f"No subjects enrolled."
 
-    def calculate_subject_average(self, subject_code):
-        if subject_code not in self.grades:
-            print(f"{subject_code} not found.")
-            return
+    def calculate_subject_averages(self):
+        for subject_code in self.grades:
+            if subject_code not in self.grades:
+                print(f"{subject_code} not found.")
+                return
 
-        subject_grades = self.grades[subject_code]
-        prelim_grade = subject_grades["Prelim"]
-        midterm_grade = subject_grades["Midterm"]
-        final_grade = subject_grades["Final"]
+            subject_grades = self.grades[subject_code]
+            prelim_grade = subject_grades["Prelim"]
+            midterm_grade = subject_grades["Midterm"]
+            final_grade = subject_grades["Final"]
 
-        if prelim_grade and midterm_grade and final_grade:
-            average = round((prelim_grade + midterm_grade + final_grade) / 3)
-            subject_grades["Average"] = average
-            subject_grades["Grade"] = self.convert_grades(average)
-            return average
-        # else:
-        #     return "Grades incomplete."
+            if prelim_grade and midterm_grade and final_grade:
+                average = round((prelim_grade + midterm_grade + final_grade) / 3)
+                subject_grades["Average"] = average
+                subject_grades["Grade"] = self.convert_grades(average)
+                # return average
+            else:
+                subject_grades["Average"] = None
+                subject_grades["Grade"] = None
+                # return None
 
     def convert_grades(self, average):
         if average >= 98:
@@ -129,29 +143,31 @@ class Student(User):
         return grade
 
     def compute_gwa(self):
-        gwa = 0
-        for periods in self.grades.values():
-            gwa += periods["Grade"]
-        gwa /= len(self.grades)
-        self.gwa = gwa
-        return gwa
+        if self.check_grades_completed():
+            gwa = 0
+            for periods in self.grades.values():
+                gwa += periods["Grade"]
+            gwa /= len(self.grades)
+            self.gwa = gwa
+            return gwa
+        else:
+            return None
 
-    def has_grade(self, subject, period):
-        return self.grades[subject.subject_code][period] is not None
+    def has_grade(self, subject_code, period):
+        return self.grades[subject_code][period] is not None
 
-    def add_grade(self, subject, period, grade):
-        self.grades[subject.subject_code][period] = grade
+    def add_grade(self, subject_code, period, grade):
+        self.grades[subject_code][period] = grade
 
-    def dashboard(self):
+    def dashboard(self, portal):
         while True:
             print("\n-------- SPCF Portal --------")
             print("[1] View Subjects")
             print("[2] View Grades")
             print("[3] View Balance")
             print("[4] View Profile")
-            print("[5] Edit Profile")
-            print("[6] Reset Profile")
-            print("[7] Change Password")
+            print("[5] Apply for Scholarship")
+            print("[6] Change Password")
             print("[0] Logout")
             menu_option = input("Choose a menu option [1, 0]: ")
             print()
@@ -160,21 +176,31 @@ class Student(User):
                 print(self.view_subjects())
 
             elif menu_option == "2":
+                self.calculate_subject_averages()
                 print(self.view_grades())
 
             elif menu_option == "3":
                 print(self.view_balance())
 
             elif menu_option == "4":
-                print(self.view_balance())
+                pass
 
             elif menu_option == "5":
-                print(self.view_balance())
+                self.calculate_subject_averages()
+                # print(self.compute_gwa())
+                if self.gwa:
+                    eligible_scholarships = []
+                    for scholarship in portal.scholarships:
+                        if scholarship.verify_eligibility(self.gwa):
+                            eligible_scholarships.append(scholarship)
+
+                    if not eligible_scholarships:
+                        print("Sorry. You are not eligible for any scholarships.")
+                    print(eligible_scholarships[0].required_gwa)
+                else:
+                    print("Grades not yet completed.")
 
             elif menu_option == "6":
-                print(self.view_balance())
-
-            elif menu_option == "7":
                 self.change_password()
 
             elif menu_option == "0":

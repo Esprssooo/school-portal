@@ -1,9 +1,10 @@
+from data import sections_data
 from Faculty import Faculty
 from Portal import Portal
 from Section import Section
 from Student import Student
 from Subject import Subject
-from data import sections_data
+from Scholarship import Scholarship
 
 student_id_counter = 1
 faculty_id_counter = 1
@@ -25,7 +26,7 @@ for section_data in sections_data:
                 subject_data["instructor"]["last_name"],
                 subject_data["instructor"]["faculty_id"],
             )
-            # faculty_id_counter += 1
+            faculty_id_counter += 1
             portal.add_faculty(faculty)
         else:
             faculty = portal.faculties[subject_data["instructor"]["faculty_id"]]
@@ -56,9 +57,13 @@ for section_data in sections_data:
             student["program"],
             section,
         )
-        # student_id_counter += 1
+        student_id_counter += 1
         section.add_student(student)
         portal.add_student(student)
+
+portal.add_scholarship(Scholarship(1.1, 1, "Academic"))
+portal.add_scholarship(Scholarship(1.3, 0.75, "Academic"))
+portal.add_scholarship(Scholarship(1.5, 0.5, "Academic"))
 
 portal.students["S2"].grades["PROG1L"]["Prelim"] = 97.65
 portal.students["S2"].grades["PROG1L"]["Midterm"] = 98.95
@@ -66,12 +71,6 @@ portal.students["S2"].grades["PROG1L"]["Final"] = 98.99
 portal.students["S2"].grades["ITC"]["Prelim"] = 88
 portal.students["S2"].grades["ITC"]["Midterm"] = 90
 portal.students["S2"].grades["ITC"]["Final"] = 94
-# for grade, test in portal.students["S2"].grades.items():
-#     print(grade, test)
-# for klase in portal.faculties["F1"].classes.values():
-#     for x in klase:
-#         if x.section_name == "CCIS3A":
-#             print(x.section_name)
 
 
 while True:
@@ -86,7 +85,7 @@ while True:
         current_user = portal.login(username, password)
 
         if current_user:
-            current_user.dashboard()
+            current_user.dashboard(portal)
 
     elif choice == "0":
         print("Exiting program...")
