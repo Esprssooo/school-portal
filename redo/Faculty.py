@@ -149,10 +149,10 @@ class Faculty(User):
             print("[1] View Classes")
             print("[2] View Students")
             print("[3] Input Students Grades (Section)")
-            print("[4] Edit Students Grades (Section)")
-            print("[5] Input/Edit Student Grade")
-            print("[6] View Profile")
-            print("[7] Change Password")
+            # print("[4] Edit Students Grades (Section)")
+            print("[4] Input/Edit Student Grade")
+            print("[5] View Profile")
+            print("[6] Change Password")
             print("[0] Logout")
             menu_option = input("Choose a menu option [1, 2, 3, 4, 5, 6, 0]: ")
             print()
@@ -174,17 +174,17 @@ class Faculty(User):
                     if period:
                         self.input_edit_grade(period, selected_section)
 
+            # elif menu_option == "4":
+            #     print(self.view_classes())
+            #     section_input = input("\nChoose section to grade: ").upper()
+            #     selected_section = self.check_section(section_input)
+
+            #     if selected_section:
+            #         period = self.choose_period()
+            #         if period:
+            #             self.input_edit_grade(period, selected_section, edit=True)
+
             elif menu_option == "4":
-                print(self.view_classes())
-                section_input = input("\nChoose section to grade: ").upper()
-                selected_section = self.check_section(section_input)
-
-                if selected_section:
-                    period = self.choose_period()
-                    if period:
-                        self.input_edit_grade(period, selected_section, edit=True)
-
-            elif menu_option == "5":
                 print(self.view_classes())
                 print(self.view_students())
                 student_input = input("Enter student full name: ")
@@ -195,7 +195,7 @@ class Faculty(User):
                     if period:
                         self.input_student_grade(period, selected_student)
 
-            elif menu_option == "6":
+            elif menu_option == "5":
                 self.profile.setupProfile()
                 self.profile.viewProfile()
                 while True:
@@ -210,7 +210,7 @@ class Faculty(User):
                     else:
                         print("\nInvalid option.\n")
 
-            elif menu_option == "7":
+            elif menu_option == "6":
                 self.change_password()
 
             elif menu_option == "0":

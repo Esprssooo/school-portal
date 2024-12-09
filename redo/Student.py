@@ -253,22 +253,22 @@ class Student(User):
             elif menu_option == "5":
                 self.scholarship_process(portal)
 
-            elif menu_option == "6":
-                self.scholarship_process(portal)
+            # elif menu_option == "6":
+            #     self.scholarship_process(portal)
 
-            elif menu_option == "7":
-                print(self.view_subjects())
-                subject_input = input("Enter subject code to drop: ").upper()
+            # elif menu_option == "7":
+            #     print(self.view_subjects())
+            #     subject_input = input("Enter subject code to drop: ").upper()
 
-                subject_to_drop = None
-                for subject in self.subjects:
-                    if subject.subject_code == subject_input:
-                        subject_to_drop = subject
-                        break
-                if subject_to_drop:
-                    subject.drop_subject(self)
-                else:
-                    print("Subject not found.")
+            #     subject_to_drop = None
+            #     for subject in self.subjects:
+            #         if subject.subject_code == subject_input:
+            #             subject_to_drop = subject
+            #             break
+            #     if subject_to_drop:
+            #         subject.drop_subject(self)
+            #     else:
+            #         print("Subject not found.")
 
             elif menu_option == "8":
                 self.change_password()
