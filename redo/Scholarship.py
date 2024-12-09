@@ -10,5 +10,6 @@ class Scholarship:
     def verify_eligibility(self, gwa):
         return gwa <= self.required_gwa
 
-    def deduct_tuition(self, student):
-        student.view_balance()
+    def deduct_tuition(self, total_tuition):
+        return total_tuition * (1 - self.discount)
+        # student.view_balance()

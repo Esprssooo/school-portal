@@ -47,7 +47,7 @@ class Student(User):
                 subject_tuition = subject.units * subject.tuition_per_unit
                 total_tuition += subject_tuition
             if self.scholarship:
-                self.balance = total_tuition * self.scholarship.discount
+                self.balance = self.scholarship.deduct_tuition(total_tuition)
             else:
                 self.balance = total_tuition
         else:
@@ -169,7 +169,12 @@ class Student(User):
             return None
 
     def has_grade(self, subject_code, period):
-        return self.grades[subject_code][period] is not None
+        if not self.grades[subject_code][period]:
+            return False
+        return True
+
+        # return self.grades[subject_code][period] is not None
+        # return grade
 
     def add_grade(self, subject_code, period, grade):
         self.grades[subject_code][period] = grade
@@ -211,10 +216,10 @@ class Student(User):
             print("[1] View Subjects")
             print("[2] View Grades")
             print("[3] View Balance")
-            print("[4] View Profile")
+            print("[4] Profile")
             print("[5] Apply for Scholarship")
-            print("[6] Add Subject")
-            print("[7] Drop Subject")
+            # print("[6] Add Subject")
+            # print("[7] Drop Subject")
             print("[8] Change Password")
             print("[0] Logout")
             menu_option = input("Choose a menu option [1, 2, 3, 4, 5, 6, 7, 8, 0]: ")
@@ -231,7 +236,19 @@ class Student(User):
                 print(self.view_balance())
 
             elif menu_option == "4":
-                pass
+                self.profile.setupProfile()
+                self.profile.viewProfile()
+                while True:
+                    choice = input(
+                        "\n\t(0) Go Back to Dashboard\n\t(1) Update Profile\n\n> "
+                    )
+                    if choice == "0":
+                        break
+                    elif choice == "1":
+                        self.profile.updateProfile()
+                        break
+                    else:
+                        print("\nInvalid option.\n")
 
             elif menu_option == "5":
                 self.scholarship_process(portal)

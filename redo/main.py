@@ -66,22 +66,22 @@ portal.add_scholarship(Scholarship(1.3, 0.75, "Academic"))
 portal.add_scholarship(Scholarship(1.5, 0.5, "Academic"))
 
 
-def check_sections():
-    for section in portal.sections:
-        for subject in section.subjects:
-            print(section.section_name, subject.subject_code)
+# def check_sections():
+#     for section in portal.sections:
+#         for subject in section.subjects:
+#             print(section.section_name, subject.subject_code)
 
 
-# portal.students["S2"].grades["PROG1L"]["Prelim"] = 97.65
-# portal.students["S2"].grades["PROG1L"]["Midterm"] = 98.95
-# portal.students["S2"].grades["PROG1L"]["Final"] = 98.99
-# portal.students["S2"].grades["ITC"]["Prelim"] = 88
-# portal.students["S2"].grades["ITC"]["Midterm"] = 90
-# portal.students["S2"].grades["ITC"]["Final"] = 94
+portal.students["S2"].grades["PROG1L"]["Prelim"] = 97.65
+portal.students["S2"].grades["PROG1L"]["Midterm"] = 98.95
+portal.students["S2"].grades["PROG1L"]["Final"] = 98.99
+portal.students["S2"].grades["ITC"]["Prelim"] = 88
+portal.students["S2"].grades["ITC"]["Midterm"] = 90
+portal.students["S2"].grades["ITC"]["Final"] = 94
 
 
 while True:
-    check_sections()
+    # check_sections()
     print("\n-------- SPCF Portal --------")
     print("[1] Login")
     print("[0] Exit")

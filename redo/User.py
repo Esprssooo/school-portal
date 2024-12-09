@@ -1,3 +1,6 @@
+from Profile import Profile
+
+
 class User:
     def __init__(self, first_name, last_name, role, user_id):
         self.first_name = first_name.title()
@@ -7,6 +10,7 @@ class User:
         self.__username = user_id
         self.__password = "1234"
         self.is_password_default = True
+        self.profile = Profile(self)
 
     def login(self, username, password):
         return username == self.__username and password == self.__password
