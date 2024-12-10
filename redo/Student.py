@@ -8,14 +8,14 @@ class Student(User):
         user_id = student_id
         super().__init__(first_name, last_name, "student", user_id)
         self.__student_id = user_id
-        self.program = program
-        self.section = section
-        self.year = section.get_year()
-        self.semester = section.get_semester()
-        self.grades = {}
-        self.gwa = None
-        self.balance = 0.00
-        self.scholarship = None
+        self.__program = program
+        self.__section = section
+        self.__year = section.get_year()
+        self.__semester = section.get_semester()
+        self.__grades = {}
+        self.__gwa = None
+        self.__balance = 0.00
+        self.__scholarship = None
 
         self.__subjects = []
         for subject in section.get_subjects():
@@ -30,13 +30,22 @@ class Student(User):
             )
 
             subject_code = subject.get_subject_code()
-            self.grades[subject_code] = {
+            self.__grades[subject_code] = {
                 "Prelim": None,
                 "Midterm": None,
                 "Final": None,
                 "Average": None,
                 "Grade": None,
             }
+
+    # def get_section(self):
+    #     return self.__section
+
+    # def get_program(self):
+    #     return self.__program
+
+    def set_scholarship(self, scholarship):
+        self.__scholarship = scholarship
 
     def get_subjects(self):
         return self.__subjects
@@ -50,16 +59,16 @@ class Student(User):
             for subject in self.__subjects:
                 subject_tuition = subject.get_units() * subject.get_tuition()
                 total_tuition += subject_tuition
-            if self.scholarship:
-                self.balance = self.scholarship.deduct_tuition(total_tuition)
+            if self.__scholarship:
+                self.__balance = self.__scholarship.deduct_tuition(total_tuition)
             else:
-                self.balance = total_tuition
+                self.__balance = total_tuition
         else:
             print("No subjects enrolled. Add subjects first.")
 
     def view_balance(self):
         self.calculate_balance()
-        return f"Balance: ₱{self.balance}"
+        return f"Balance: ₱{self.__balance}"
 
     def view_subjects(self):
         if self.__subjects:
@@ -70,18 +79,18 @@ class Student(User):
             print("No subjects enrolled.")
 
     def check_grades_completed(self):
-        for periods in self.grades.values():
+        for periods in self.__grades.values():
             for grade in periods.values():
                 if not grade:
                     return False
         return True
 
     def view_grades(self):
-        if self.grades:
+        if self.__grades:
             grades = "Grades:"
-            for subject_code, periods in self.grades.items():
+            for subject_code, periods in self.__grades.items():
                 grades += f"\n  [{subject_code}]:"
-                # self.grades[subject_code]["Average"] = self.calculate_subject_average(
+                # self.__grades[subject_code]["Average"] = self.calculate_subject_average(
                 #     subject_code
                 # )
 
@@ -103,9 +112,9 @@ class Student(User):
         else:
             return "No subjects enrolled."
 
-        # if self.grades:
+        # if self.__grades:
         #     grades = "Grades:"
-        #     for subject_code, periods in self.grades.items():
+        #     for subject_code, periods in self.__grades.items():
         #         grades += f"\n  [{subject_code}]:"
 
         #         for period, grade in periods.items():
@@ -117,12 +126,12 @@ class Student(User):
         #     return f"No subjects enrolled."
 
     def calculate_subject_averages(self):
-        for subject_code in self.grades:
-            if subject_code not in self.grades:
+        for subject_code in self.__grades:
+            if subject_code not in self.__grades:
                 print(f"{subject_code} not found.")
                 return
 
-            subject_grades = self.grades[subject_code]
+            subject_grades = self.__grades[subject_code]
             prelim_grade = subject_grades["Prelim"]
             midterm_grade = subject_grades["Midterm"]
             final_grade = subject_grades["Final"]
@@ -162,58 +171,63 @@ class Student(User):
     def compute_gwa(self):
         if self.check_grades_completed():
             gwa = 0
-            for periods in self.grades.values():
+            for periods in self.__grades.values():
                 gwa += periods["Grade"]
-            self.gwa = round(gwa / len(self.grades), 2)
-            return self.gwa
+            self.__gwa = round(gwa / len(self.__grades), 2)
+            return self.__gwa
         else:
             return None
 
     def has_grade(self, subject_code, period):
-        if not self.grades[subject_code][period]:
+        if not self.__grades[subject_code][period]:
             return False
         return True
 
-        # return self.grades[subject_code][period] is not None
+        # return self.__grades[subject_code][period] is not None
         # return grade
 
     def add_grade(self, subject_code, period, grade):
-        self.grades[subject_code][period] = grade
+        self.__grades[subject_code][period] = grade
 
     def scholarship_process(self, portal):
-        self.calculate_subject_averages()
-        self.compute_gwa()
-        if self.gwa:
-            eligible_scholarships = []
-            for scholarship in portal.get_scholarships():
-                if scholarship.verify_eligibility(self.gwa):
-                    eligible_scholarships.append(scholarship)
+        if not self.__scholarship:
+            self.calculate_subject_averages()
+            self.compute_gwa()
+            if self.__gwa:
+                eligible_scholarships = []
+                for scholarship in portal.get_scholarships():
+                    if scholarship.verify_eligibility(self.__gwa):
+                        eligible_scholarships.append(scholarship)
 
-            if eligible_scholarships:
-                best_scholarship = eligible_scholarships[0]
+                if eligible_scholarships:
+                    best_scholarship = eligible_scholarships[0]
 
-                for scholarship in eligible_scholarships:
-                    if scholarship.get_discount() > best_scholarship.get_discount():
-                        best_scholarship = scholarship
-                print(
-                    f"You are eligible for {best_scholarship.get_discount() * 100}% Discount {best_scholarship.get_type()} Scholarship"
-                )
-                while True:
-                    confirm = input("Would you like to apply for it? [Y/n]: ").lower()
+                    for scholarship in eligible_scholarships:
+                        if scholarship.get_discount() > best_scholarship.get_discount():
+                            best_scholarship = scholarship
+                    print(
+                        f"You are eligible for {best_scholarship.get_discount() * 100}% Discount {best_scholarship.get_type()} Scholarship"
+                    )
+                    while True:
+                        confirm = input(
+                            "Would you like to apply for it? [Y/n]: "
+                        ).lower()
 
-                    if confirm == "n":
-                        break
-                    elif confirm == "y" or confirm == "":
-                        best_scholarship.apply(self)
-                        print(self.view_balance())
-                        break
-                    else:
-                        print("Invalid option.")
+                        if confirm == "n":
+                            break
+                        elif confirm == "y" or confirm == "":
+                            best_scholarship.apply(self)
+                            print(self.view_balance())
+                            break
+                        else:
+                            print("Invalid option.")
+                else:
+                    print("Sorry. You are not eligible for any scholarships.")
+
             else:
-                print("Sorry. You are not eligible for any scholarships.")
-
+                print("Grades not yet completed.")
         else:
-            print("Grades not yet completed.")
+            print("You already have a scholarship.")
 
     def dashboard(self, portal):
         while True:
@@ -259,7 +273,7 @@ class Student(User):
                 self.scholarship_process(portal)
 
             # elif menu_option == "6":
-            #     self.scholarship_process(portal)
+            #     self.__scholarship_process(portal)
 
             # elif menu_option == "7":
             #     print(self.view_subjects())

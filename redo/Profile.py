@@ -1,20 +1,26 @@
 class Profile:
     def __init__(self, user):
-        self.first_name = user._first_name
-        self.last_name = user._last_name
-        self.sex = None
-        self.nationality = None
-        self.religion = None
-        self.date_of_birth = None
-        self.place_of_birth = None
-        self.civil_status = None
-        self.address = None
-        self.mobile_number = None
-        self.email = None
-        self.setup_status = False
+        self.__first_name = user._first_name
+        self.__last_name = user._last_name
+        self.__sex = None
+        self.__nationality = None
+        self.__religion = None
+        self.__date_of_birth = None
+        self.__place_of_birth = None
+        self.__civil_status = None
+        self.__address = None
+        self.__mobile_number = None
+        self.__email = None
+        self.__setup_status = False
+
+        # if user.get_role() == "student":
+        #     self.__program = user.get_program()
+        #     self.__section = user.get_section()
+        #     self.__year = self.__section.get_year()
+        #     self.__semester = self.__section.get_semester()
 
     def setupProfile(self):
-        if not self.setup_status:
+        if not self.__setup_status:
             print("SET UP YOUR PROFILE:\n")
 
             # Setting up user's Profile
@@ -22,10 +28,10 @@ class Profile:
                 sex = input("Sex: [M] Male | [F] Female : ").upper()
                 if sex:
                     if sex == "M":
-                        self.sex = "Male"
+                        self.__sex = "Male"
                         break
                     elif sex == "F":
-                        self.sex = "Female"
+                        self.__sex = "Female"
                         break
                     else:
                         print("Invalid choice.\n")
@@ -35,14 +41,14 @@ class Profile:
             while True:
                 nationality = input("Nationality : ").title()
                 if nationality:
-                    self.nationality = nationality
+                    self.__nationality = nationality
                     break
                 else:
                     print("Invalid, this info is required.\n")
 
             religion = input("Religion (optional): ").title()
             if religion:
-                self.religion = religion
+                self.__religion = religion
 
             while True:
                 months = [
@@ -104,7 +110,7 @@ class Profile:
                 year = input("Birth Year : ")
                 if year:
                     if year.isnumeric() and (int(year) < 2024 and int(year) >= 1900):
-                        self.date_of_birth = f"{month} {day}, {year}"
+                        self.__date_of_birth = f"{month} {day}, {year}"
                         break
                     else:
                         print("Invalid.\n")
@@ -114,7 +120,7 @@ class Profile:
             while True:
                 place_of_birth = input("Place of Birth : ").title()
                 if place_of_birth:
-                    self.place_of_birth = place_of_birth
+                    self.__place_of_birth = place_of_birth
                     break
                 else:
                     print("Invalid, this info is required.\n")
@@ -126,43 +132,43 @@ class Profile:
                 if not civil_status:
                     break
                 elif civil_status == "1":
-                    self.civil_status = "Single"
+                    self.__civil_status = "Single"
                     break
                 elif civil_status == "2":
-                    self.civil_status = "Married"
+                    self.__civil_status = "Married"
                     break
                 elif civil_status == "3":
-                    self.civil_status = "Separated"
+                    self.__civil_status = "Separated"
                     break
                 elif civil_status == "4":
-                    self.civil_status = "Divorced"
+                    self.__civil_status = "Divorced"
                     break
                 elif civil_status == "5":
-                    self.civil_status = "Widowed"
+                    self.__civil_status = "Widowed"
                     break
                 else:
                     print("Invalid choice.")
 
             address = input("Address (optional): ")
             if address:
-                self.address = address
+                self.__address = address
 
             while True:
                 mobile_number = input("Mobile Number (optional): ")
                 if not mobile_number:
                     break
                 elif mobile_number.isnumeric() and len(mobile_number) == 11:
-                    self.mobile_number = mobile_number
+                    self.__mobile_number = mobile_number
                     break
                 else:
                     print("Invalid mobile number. Enter 11 digits or leave it blank.\n")
 
             email = input("Email (optional): ")
             if email:
-                self.email = email
+                self.__email = email
 
             print("\nProfile set up successful!\n")
-            self.setup_status = True
+            self.__setup_status = True
 
     def updateProfile(self):
         while True:
@@ -171,23 +177,23 @@ class Profile:
                 f"""
     Personal Details:
                                 
-        (-) First Name      : {self.first_name}
-        (-) Last Name       : {self.last_name}
-        (-) Sex             : {self.sex}
-        (-) Nationality     : {self.nationality}
-        (1) Religion        : {self.religion}
+        (-) First Name      : {self.__first_name}
+        (-) Last Name       : {self.__last_name}
+        (-) Sex             : {self.__sex}
+        (-) Nationality     : {self.__nationality}
+        (1) Religion        : {self.__religion}
     
     Birth Details:
 
-        (-) Date of Birth   : {self.date_of_birth}
-        (-) Place of Birth  : {self.place_of_birth}
+        (-) Date of Birth   : {self.__date_of_birth}
+        (-) Place of Birth  : {self.__place_of_birth}
 
     Other Information:
 
-        (2) Civil Status    : {self.civil_status}
-        (3) Address         : {self.address}
-        (4) Mobile Number   : {self.mobile_number}
-        (5) Email           : {self.email}
+        (2) Civil Status    : {self.__civil_status}
+        (3) Address         : {self.__address}
+        (4) Mobile Number   : {self.__mobile_number}
+        (5) Email           : {self.__email}
 
         (0) Exit Update Profile
     """
@@ -200,7 +206,7 @@ class Profile:
             elif choice == "1":
                 religion = input("Religion : ").title()
                 if religion:
-                    self.religion = religion
+                    self.__religion = religion
             elif choice == "2":
                 while True:
                     civil_status = input(
@@ -209,38 +215,38 @@ class Profile:
                     if not civil_status:
                         break
                     if civil_status == "1":
-                        self.civil_status = "Single"
+                        self.__civil_status = "Single"
                         break
                     elif civil_status == "2":
-                        self.civil_status = "Married"
+                        self.__civil_status = "Married"
                         break
                     elif civil_status == "3":
-                        self.civil_status = "Separated"
+                        self.__civil_status = "Separated"
                         break
                     elif civil_status == "4":
-                        self.civil_status = "Divorced"
+                        self.__civil_status = "Divorced"
                         break
                     elif civil_status == "5":
-                        self.civil_status = "Widowed"
+                        self.__civil_status = "Widowed"
                         break
                     else:
                         print("Invalid choice.\n")
             elif choice == "3":
                 address = input("Address : ")
                 if address:
-                    self.address = address
+                    self.__address = address
             elif choice == "4":
                 while True:
                     mobile_number = input("Mobile Number : ")
                     if mobile_number.isnumeric() and len(mobile_number) == 11:
-                        self.mobile_number = mobile_number
+                        self.__mobile_number = mobile_number
                         break
                     else:
                         print("Sorry that's not a mobile number.\n")
             elif choice == "5":
                 email = input("Email : ")
                 if email:
-                    self.email = email
+                    self.__email = email
             else:
                 print("Invalid choice.\n")
 
@@ -249,23 +255,23 @@ class Profile:
             f"""
 Personal Details:
 
-    First Name      : {self.first_name}
-    Last Name       : {self.last_name}
-    Sex             : {self.sex}
-    Nationality     : {self.nationality}
-    Religion        : {self.religion}
+    First Name      : {self.__first_name}
+    Last Name       : {self.__last_name}
+    Sex             : {self.__sex}
+    Nationality     : {self.__nationality}
+    Religion        : {self.__religion}
 
 Birth Details:
 
-    Date of Birth   : {self.date_of_birth}
-    Place of Birth  : {self.place_of_birth}
+    Date of Birth   : {self.__date_of_birth}
+    Place of Birth  : {self.__place_of_birth}
 
 Other Information:
 
-    Civil Status    : {self.civil_status}
-    Address         : {self.address}
-    Mobile Number   : {self.mobile_number}
-    Email           : {self.email}
+    Civil Status    : {self.__civil_status}
+    Address         : {self.__address}
+    Mobile Number   : {self.__mobile_number}
+    Email           : {self.__email}
 """
         )
 

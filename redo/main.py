@@ -70,12 +70,12 @@ portal.add_scholarship(Scholarship(1.5, 0.5, "Academic"))
 #         for subject in section.subjects:
 #             print(section.section_name, subject.subject_code)
 
-portal.get_students()["S0002"].grades["PROG1L"]["Prelim"] = 97.65
-portal.get_students()["S0002"].grades["PROG1L"]["Midterm"] = 98.95
-portal.get_students()["S0002"].grades["PROG1L"]["Final"] = 98.99
-portal.get_students()["S0002"].grades["ITC"]["Prelim"] = 88
-portal.get_students()["S0002"].grades["ITC"]["Midterm"] = 90
-portal.get_students()["S0002"].grades["ITC"]["Final"] = 94
+portal.get_students()["S0002"]._Student__grades["PROG1L"]["Prelim"] = 97.65
+portal.get_students()["S0002"]._Student__grades["PROG1L"]["Midterm"] = 98.95
+portal.get_students()["S0002"]._Student__grades["PROG1L"]["Final"] = 98.99
+portal.get_students()["S0002"]._Student__grades["ITC"]["Prelim"] = 88
+portal.get_students()["S0002"]._Student__grades["ITC"]["Midterm"] = 90
+portal.get_students()["S0002"]._Student__grades["ITC"]["Final"] = 94
 
 
 while True:

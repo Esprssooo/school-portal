@@ -12,6 +12,9 @@ class User:
         self._is_password_default = True
         self._profile = Profile(self)
 
+    def get_role(self):
+        return self._role
+
     def get_last_name(self):
         return self._last_name
 

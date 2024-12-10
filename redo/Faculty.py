@@ -6,13 +6,13 @@ class Faculty(User):
         # user_id = f"F{faculty_count}"
         user_id = faculty_id
         super().__init__(first_name, last_name, "faculty", user_id)
-        self.faculty_id = user_id
-        self.classes = {}
+        self.__faculty_id = user_id
+        self.__classes = {}
 
     def handle_classes(self, subject_name, section):
-        if subject_name not in self.classes:
-            self.classes[subject_name] = []
-        self.classes[subject_name].append(section)
+        if subject_name not in self.__classes:
+            self.__classes[subject_name] = []
+        self.__classes[subject_name].append(section)
 
     def view_students(self):
         while True:
@@ -26,11 +26,11 @@ class Faculty(User):
                 print("Invalid section")
 
     def view_classes(self):
-        if not self.classes:
+        if not self.__classes:
             return "No classes assigned."
 
         classes = "Your classes: "
-        for subject, sections in self.classes.items():
+        for subject, sections in self.__classes.items():
             classes += f"\n  {subject}: "
             for section in sections:
                 classes += f"\n  - {section.get_section_name()} "
@@ -39,7 +39,7 @@ class Faculty(User):
     def input_edit_grade(self, period, section, edit=False):
         assigned_subject = None
         for subject in section.get_subjects():
-            if subject.get_subject_name() in self.classes:
+            if subject.get_subject_name() in self.__classes:
                 assigned_subject = subject
 
         if assigned_subject:
@@ -128,7 +128,7 @@ class Faculty(User):
 
     def input_student_grade(self, period, student):
         for subject in student.get_subjects():
-            if subject.get_subject_name() in self.classes:
+            if subject.get_subject_name() in self.__classes:
                 while True:
                     grade_input = input(
                         f"Enter grade for {student.get_last_name()}, {student.get_first_name()}: "
@@ -149,7 +149,7 @@ class Faculty(User):
 
     def check_section(self, section_name):
         section_found = None
-        for sections in self.classes.values():
+        for sections in self.__classes.values():
             for section in sections:
                 if section.get_section_name() == section_name:
                     section_found = section
@@ -161,7 +161,7 @@ class Faculty(User):
 
     def check_student(self, student_name):
         student_found = None
-        for sections in self.classes.values():
+        for sections in self.__classes.values():
             for section in sections:
                 for student in section.get_students():
                     if student.get_student_id() == student_name:
@@ -215,7 +215,7 @@ class Faculty(User):
             elif menu_option == "4":
                 print(self.view_classes())
                 print(self.view_students())
-                student_input = input("Enter student full name: ")
+                student_input = input("Enter student id: ")
                 selected_student = self.check_student(student_input)
 
                 if selected_student:

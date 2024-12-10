@@ -11,7 +11,7 @@ class Scholarship:
         return self.__discount
 
     def apply(self, student):
-        student.scholarship = self
+        student.set_scholarship(self)
 
     def verify_eligibility(self, gwa):
         return gwa <= self.__required_gwa
