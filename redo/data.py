@@ -28,7 +28,7 @@ sections_data = [
                 "subject_code": "PROG1L",
                 "subject_name": "Fundamentals of Programming (Lab)",
                 "units": 3,
-                "tuition_per_unit": 1000,
+                "tuition_per_unit": 1000.00,
                 "instructor": {
                     "first_name": "Bernadette",
                     "last_name": "Raon",
@@ -39,7 +39,7 @@ sections_data = [
                 "subject_code": "ITC",
                 "subject_name": "Introduction to Computing",
                 "units": 3,
-                "tuition_per_unit": 900,
+                "tuition_per_unit": 900.00,
                 "instructor": {
                     "first_name": "Liza",
                     "last_name": "Mananquil",
@@ -71,7 +71,7 @@ sections_data = [
                 "subject_code": "PROG1L",
                 "subject_name": "Fundamentals of Programming (Lab)",
                 "units": 3,
-                "tuition_per_unit": 1000,
+                "tuition_per_unit": 1000.00,
                 "instructor": {
                     "first_name": "Bernadette",
                     "last_name": "Raon",
@@ -82,7 +82,7 @@ sections_data = [
                 "subject_code": "IML",
                 "subject_name": "Information Management (Lab)",
                 "units": 3,
-                "tuition_per_unit": 1000,
+                "tuition_per_unit": 1000.00,
                 "instructor": {
                     "first_name": "Jhulyna Mae",
                     "last_name": "Rubio",
@@ -93,7 +93,7 @@ sections_data = [
                 "subject_code": "OSL",
                 "subject_name": "Operating Systems (Lab)",
                 "units": 3,
-                "tuition_per_unit": 1000,
+                "tuition_per_unit": 1000.00,
                 "instructor": {
                     "first_name": "Harold Jacob",
                     "last_name": "Henthorn",

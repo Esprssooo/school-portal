@@ -7,29 +7,29 @@ class Student(User):
         # user_id = f"S{student_count}"
         user_id = student_id
         super().__init__(first_name, last_name, "student", user_id)
-        self.student_id = user_id
+        self.__student_id = user_id
         self.program = program
         self.section = section
-        self.year = section.year
-        self.semester = section.semester
+        self.year = section.get_year()
+        self.semester = section.get_semester()
         self.grades = {}
         self.gwa = None
         self.balance = 0.00
         self.scholarship = None
 
-        self.subjects = []
-        for subject in section.subjects:
-            self.subjects.append(
+        self.__subjects = []
+        for subject in section.get_subjects():
+            self.__subjects.append(
                 Subject(
-                    subject.subject_code,
-                    subject.subject_name,
-                    subject.units,
-                    subject.tuition_per_unit,
-                    subject.instructor,
+                    subject.get_subject_code(),
+                    subject.get_subject_name(),
+                    subject.get_units(),
+                    subject.get_tuition(),
+                    subject.get_instructor(),
                 )
             )
 
-            subject_code = subject.subject_code
+            subject_code = subject.get_subject_code()
             self.grades[subject_code] = {
                 "Prelim": None,
                 "Midterm": None,
@@ -38,11 +38,17 @@ class Student(User):
                 "Grade": None,
             }
 
+    def get_subjects(self):
+        return self.__subjects
+
+    def get_student_id(self):
+        return self.__student_id
+
     def calculate_balance(self):
-        if self.subjects:
+        if self.__subjects:
             total_tuition = 0
-            for subject in self.subjects:
-                subject_tuition = subject.units * subject.tuition_per_unit
+            for subject in self.__subjects:
+                subject_tuition = subject.get_units() * subject.get_tuition()
                 total_tuition += subject_tuition
             if self.scholarship:
                 self.balance = self.scholarship.deduct_tuition(total_tuition)
@@ -53,12 +59,12 @@ class Student(User):
 
     def view_balance(self):
         self.calculate_balance()
-        return f"Balance: {self.balance}"
+        return f"Balance: ₱{self.balance}"
 
     def view_subjects(self):
-        if self.subjects:
+        if self.__subjects:
             print("Subjects:")
-            for subject in self.subjects:
+            for subject in self.__subjects:
                 print(subject.view_details())
         else:
             print("No subjects enrolled.")
@@ -179,14 +185,18 @@ class Student(User):
         self.compute_gwa()
         if self.gwa:
             eligible_scholarships = []
-            for scholarship in portal.scholarships:
+            for scholarship in portal.get_scholarships():
                 if scholarship.verify_eligibility(self.gwa):
                     eligible_scholarships.append(scholarship)
 
             if eligible_scholarships:
                 best_scholarship = eligible_scholarships[0]
+
+                for scholarship in eligible_scholarships:
+                    if scholarship.get_discount() > best_scholarship.get_discount():
+                        best_scholarship = scholarship
                 print(
-                    f"You are eligible for {best_scholarship.discount * 100}% Discount {best_scholarship.type} Scholarship"
+                    f"You are eligible for {best_scholarship.get_discount() * 100}% Discount {best_scholarship.get_type()} Scholarship"
                 )
                 while True:
                     confirm = input("Would you like to apply for it? [Y/n]: ").lower()
@@ -231,8 +241,8 @@ class Student(User):
                 print(self.view_balance())
 
             elif menu_option == "4":
-                self.profile.setupProfile()
-                self.profile.viewProfile()
+                self._profile.setupProfile()
+                self._profile.viewProfile()
                 while True:
                     choice = input(
                         "\n\t(0) Go Back to Dashboard\n\t(1) Update Profile\n\n> "
@@ -240,7 +250,7 @@ class Student(User):
                     if choice == "0":
                         break
                     elif choice == "1":
-                        self.profile.updateProfile()
+                        self._profile.updateProfile()
                         break
                     else:
                         print("\nInvalid option.\n")
@@ -256,7 +266,7 @@ class Student(User):
             #     subject_input = input("Enter subject code to drop: ").upper()
 
             #     subject_to_drop = None
-            #     for subject in self.subjects:
+            #     for subject in self.__subjects:
             #         if subject.subject_code == subject_input:
             #             subject_to_drop = subject
             #             break

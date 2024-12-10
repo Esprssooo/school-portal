@@ -1,7 +1,7 @@
 class Profile:
     def __init__(self, user):
-        self.first_name = user.first_name
-        self.last_name = user.last_name
+        self.first_name = user._first_name
+        self.last_name = user._last_name
         self.sex = None
         self.nationality = None
         self.religion = None
@@ -15,51 +15,104 @@ class Profile:
 
     def setupProfile(self):
         if not self.setup_status:
-            print("Set Up your Profile:\n\n")
+            print("SET UP YOUR PROFILE:\n")
 
             # Setting up user's Profile
             while True:
-                print("Sex:")
-                sex = input("[M] Male | [F] Female\n: ").upper()
-                if sex == "M":
-                    self.sex = "Male"
-                    break
-                elif sex == "F":
-                    self.sex = "Female"
-                    break
+                sex = input("Sex: [M] Male | [F] Female : ").upper()
+                if sex:
+                    if sex == "M":
+                        self.sex = "Male"
+                        break
+                    elif sex == "F":
+                        self.sex = "Female"
+                        break
+                    else:
+                        print("Invalid choice.\n")
                 else:
-                    print("Invalid choice.\n")
+                    print("Invalid, this info is required.\n")
 
             while True:
-                nationality = input("Nationality: ").title()
+                nationality = input("Nationality : ").title()
                 if nationality:
                     self.nationality = nationality
                     break
                 else:
                     print("Invalid, this info is required.\n")
 
-            religion = input("Religion: ").title()
+            religion = input("Religion (optional): ").title()
             if religion:
                 self.religion = religion
 
             while True:
-                month = input("Enter your birth month: (January): ").title()
+                months = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ]
+                month = input("Birth Month (January) : ").title()
                 if month:
-                    day = input("Enter your birth date (16): ")
-                    if day:
-                        year = input("Enter your birth year (2004): ")
-                        if year:
-                            self.date_of_birth = f"{month} {day}, {year}"
-                            break
-                        else:
-                            print("Invalid, this info is required.\n")
+                    if month in months:
+                        break
                     else:
-                        print("Invalid, this info is required.\n")
+                        print("Invalid, input a valid month.\n")
                 else:
                     print("Invalid, this info is required.\n")
 
             while True:
-                place_of_birth = input("Place of Birth: ").title()
+                thirties = ["April", "June", "September", "November"]
+                if month == "February":
+                    day = input("Birth Date (1-28) : ")
+                    if day:
+                        if day.isnumeric() and (int(day) > 0 and int(day)) <= 28:
+                            break
+                        else:
+                            print("Invalid, it must be a number between 1-28.\n")
+                    else:
+                        print("Invalid, this info is required.\n")
+
+                elif month in thirties:
+                    day = input("Birth Date (1-30) : ")
+                    if day:
+                        if day.isnumeric() and (int(day) > 0 and int(day)) <= 30:
+                            break
+                        else:
+                            print("Invalid, it must be a number between 1-30.\n")
+                    else:
+                        print("Invalid, this info is required.\n")
+
+                else:
+                    day = input("Birth Date (1-31) : ")
+                    if day:
+                        if day.isnumeric() and (int(day) > 0 and int(day)) <= 31:
+                            break
+                        else:
+                            print("Invalid, it must be a number between 1-31.\n")
+                    else:
+                        print("Invalid, this info is required.\n")
+
+            while True:
+                year = input("Birth Year : ")
+                if year:
+                    if year.isnumeric() and (int(year) < 2024 and int(year) >= 1900):
+                        self.date_of_birth = f"{month} {day}, {year}"
+                        break
+                    else:
+                        print("Invalid.\n")
+                else:
+                    print("Invalid, this info is required.\n")
+
+            while True:
+                place_of_birth = input("Place of Birth : ").title()
                 if place_of_birth:
                     self.place_of_birth = place_of_birth
                     break
@@ -68,7 +121,7 @@ class Profile:
 
             while True:
                 civil_status = input(
-                    "Civil Status:\n(1) Single\n(2) Married\n(3) Separated\n(4) Divorced\n(5) Widowed\n : "
+                    "\n(1) Single\n(2) Married\n(3) Separated\n(4) Divorced\n(5) Widowed\n\nCivil Status [1-5]: "
                 )
                 if not civil_status:
                     break
@@ -88,23 +141,23 @@ class Profile:
                     self.civil_status = "Widowed"
                     break
                 else:
-                    print("Invalid choice.\n")
+                    print("Invalid choice.")
 
-            address = input("Address: ")
+            address = input("Address (optional): ")
             if address:
                 self.address = address
 
             while True:
-                mobile_number = input("Mobile Number: ")
+                mobile_number = input("Mobile Number (optional): ")
                 if not mobile_number:
                     break
                 elif mobile_number.isnumeric() and len(mobile_number) == 11:
                     self.mobile_number = mobile_number
                     break
                 else:
-                    print("Sorry that's not a valid mobile number.\n")
+                    print("Invalid mobile number. Enter 11 digits or leave it blank.\n")
 
-            email = input("Email: ")
+            email = input("Email (optional): ")
             if email:
                 self.email = email
 
@@ -116,15 +169,21 @@ class Profile:
             print("Current Profile:\n")
             print(
                 f"""
-    Personal Data:
+    Personal Details:
                                 
         (-) First Name      : {self.first_name}
         (-) Last Name       : {self.last_name}
         (-) Sex             : {self.sex}
         (-) Nationality     : {self.nationality}
         (1) Religion        : {self.religion}
+    
+    Birth Details:
+
         (-) Date of Birth   : {self.date_of_birth}
         (-) Place of Birth  : {self.place_of_birth}
+
+    Other Information:
+
         (2) Civil Status    : {self.civil_status}
         (3) Address         : {self.address}
         (4) Mobile Number   : {self.mobile_number}
@@ -134,7 +193,7 @@ class Profile:
     """
             )
 
-            choice = input("\nChoose which info to update [0-5]: ")
+            choice = input("\nChoose which info to update [0-5]\n> ")
             if choice == "0":
                 print("\nProfile updated successfully!\n")
                 break
@@ -145,7 +204,7 @@ class Profile:
             elif choice == "2":
                 while True:
                     civil_status = input(
-                        "Civil Status:\n(1) Single\n(2) Married\n(3) Separated\n(4) Divorced\n(5) Widowed\n : "
+                        "\n(1) Single\n(2) Married\n(3) Separated\n(4) Divorced\n(5) Widowed\n\nCivil Status [1-5]: "
                     )
                     if not civil_status:
                         break
@@ -188,15 +247,21 @@ class Profile:
     def viewProfile(self):
         print(
             f"""
-Personal Data:
+Personal Details:
 
     First Name      : {self.first_name}
     Last Name       : {self.last_name}
     Sex             : {self.sex}
     Nationality     : {self.nationality}
     Religion        : {self.religion}
+
+Birth Details:
+
     Date of Birth   : {self.date_of_birth}
     Place of Birth  : {self.place_of_birth}
+
+Other Information:
+
     Civil Status    : {self.civil_status}
     Address         : {self.address}
     Mobile Number   : {self.mobile_number}

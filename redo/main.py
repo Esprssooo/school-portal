@@ -20,7 +20,7 @@ for section_data in sections_data:
 
     # create faculty objects
     for subject_data in section_data["subjects"]:
-        if subject_data["instructor"]["faculty_id"] not in portal.faculties:
+        if subject_data["instructor"]["faculty_id"] not in portal.get_faculties():
             faculty = Faculty(
                 subject_data["instructor"]["first_name"],
                 subject_data["instructor"]["last_name"],
@@ -29,7 +29,8 @@ for section_data in sections_data:
             # faculty_id_counter += 1
             portal.add_faculty(faculty)
         else:
-            faculty = portal.faculties[subject_data["instructor"]["faculty_id"]]
+            # faculty = portal.faculties[subject_data["instructor"]["faculty_id"]y]
+            faculty = portal.get_faculty(subject_data["instructor"]["faculty_id"])
 
         # create subject objects
         subject = Subject(
@@ -41,9 +42,7 @@ for section_data in sections_data:
         )
         section.add_subject(subject)
 
-        if subject.subject_name not in faculty.classes:
-            faculty.classes[subject.subject_name] = []
-        faculty.classes[subject.subject_name].append(section)
+        faculty.handle_classes(subject.get_subject_name(), section)
         # if subject not in faculty.classes:
         #     faculty.classes[subject] = []
         # faculty.classes[subject].append(section)
@@ -71,13 +70,12 @@ portal.add_scholarship(Scholarship(1.5, 0.5, "Academic"))
 #         for subject in section.subjects:
 #             print(section.section_name, subject.subject_code)
 
-
-# portal.students["S0002"].grades["PROG1L"]["Prelim"] = 97.65
-# portal.students["S0002"].grades["PROG1L"]["Midterm"] = 98.95
-# portal.students["S0002"].grades["PROG1L"]["Final"] = 98.99
-# portal.students["S0002"].grades["ITC"]["Prelim"] = 88
-# portal.students["S0002"].grades["ITC"]["Midterm"] = 90
-# portal.students["S0002"].grades["ITC"]["Final"] = 94
+portal.get_students()["S0002"].grades["PROG1L"]["Prelim"] = 97.65
+portal.get_students()["S0002"].grades["PROG1L"]["Midterm"] = 98.95
+portal.get_students()["S0002"].grades["PROG1L"]["Final"] = 98.99
+portal.get_students()["S0002"].grades["ITC"]["Prelim"] = 88
+portal.get_students()["S0002"].grades["ITC"]["Midterm"] = 90
+portal.get_students()["S0002"].grades["ITC"]["Final"] = 94
 
 
 while True:
