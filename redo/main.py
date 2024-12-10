@@ -6,8 +6,8 @@ from Student import Student
 from Subject import Subject
 from Scholarship import Scholarship
 
-student_id_counter = 1
-faculty_id_counter = 1
+# student_id_counter = 1
+# faculty_id_counter = 1
 
 # populate data
 portal = Portal()
@@ -26,7 +26,7 @@ for section_data in sections_data:
                 subject_data["instructor"]["last_name"],
                 subject_data["instructor"]["faculty_id"],
             )
-            faculty_id_counter += 1
+            # faculty_id_counter += 1
             portal.add_faculty(faculty)
         else:
             faculty = portal.faculties[subject_data["instructor"]["faculty_id"]]
@@ -57,7 +57,7 @@ for section_data in sections_data:
             student["program"],
             section,
         )
-        student_id_counter += 1
+        # student_id_counter += 1
         section.add_student(student)
         portal.add_student(student)
 
@@ -72,12 +72,12 @@ portal.add_scholarship(Scholarship(1.5, 0.5, "Academic"))
 #             print(section.section_name, subject.subject_code)
 
 
-portal.students["S2"].grades["PROG1L"]["Prelim"] = 97.65
-portal.students["S2"].grades["PROG1L"]["Midterm"] = 98.95
-portal.students["S2"].grades["PROG1L"]["Final"] = 98.99
-portal.students["S2"].grades["ITC"]["Prelim"] = 88
-portal.students["S2"].grades["ITC"]["Midterm"] = 90
-portal.students["S2"].grades["ITC"]["Final"] = 94
+# portal.students["S0002"].grades["PROG1L"]["Prelim"] = 97.65
+# portal.students["S0002"].grades["PROG1L"]["Midterm"] = 98.95
+# portal.students["S0002"].grades["PROG1L"]["Final"] = 98.99
+# portal.students["S0002"].grades["ITC"]["Prelim"] = 88
+# portal.students["S0002"].grades["ITC"]["Midterm"] = 90
+# portal.students["S0002"].grades["ITC"]["Final"] = 94
 
 
 while True:

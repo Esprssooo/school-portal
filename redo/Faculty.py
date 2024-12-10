@@ -22,13 +22,13 @@ class Faculty(User):
 
     def view_classes(self):
         if not self.classes:
-            classes = "No classes assigned."
-        else:
-            classes = "Your classes: "
-            for subject, sections in self.classes.items():
-                classes += f"\n  {subject}: "
-                for section in sections:
-                    classes += f"\n  - {section.section_name} "
+            return "No classes assigned."
+
+        classes = "Your classes: "
+        for subject, sections in self.classes.items():
+            classes += f"\n  {subject}: "
+            for section in sections:
+                classes += f"\n  - {section.section_name} "
         return classes
 
     def input_edit_grade(self, period, section, edit=False):
@@ -74,6 +74,20 @@ class Faculty(User):
                                     )
                             except ValueError:
                                 print("Invalid input.")
+            all_graded = True
+            for student in section.students:
+                if not student.has_grade(assigned_subject.subject_code, period):
+                    all_graded = False
+                    break
+
+            if all_graded:
+                print(
+                    f"All students in {section.section_name} have been graded for {period}."
+                )
+            else:
+                print(
+                    f"Not all students in {section.section_name} have been graded for {period}."
+                )
         else:
             print(
                 f"You are not assigned to any subject in section {section.section_name}."
@@ -174,7 +188,7 @@ class Faculty(User):
                     if period:
                         self.input_edit_grade(period, selected_section)
 
-            # elif menu_option == "4":
+            # elif menu_option == "10":
             #     print(self.view_classes())
             #     section_input = input("\nChoose section to grade: ").upper()
             #     selected_section = self.check_section(section_input)

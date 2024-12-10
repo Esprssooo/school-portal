@@ -12,7 +12,6 @@ class Student(User):
         self.section = section
         self.year = section.year
         self.semester = section.semester
-        # self.subjects = section.subjects
         self.grades = {}
         self.gwa = None
         self.balance = 0.00
@@ -30,7 +29,6 @@ class Student(User):
                 )
             )
 
-        for subject in self.subjects:
             subject_code = subject.subject_code
             self.grades[subject_code] = {
                 "Prelim": None,
@@ -59,13 +57,11 @@ class Student(User):
 
     def view_subjects(self):
         if self.subjects:
-            subjects = "Subjects:"
+            print("Subjects:")
             for subject in self.subjects:
-                subjects += f"\n  [{subject.subject_code}] {subject.subject_name}\n    Units: {subject.units}\n    Instructor: {subject.instructor.full_name}"
-                subjects += "\n"
-            return subjects
+                print(subject.view_details())
         else:
-            return "No subjects enrolled."
+            print("No subjects enrolled.")
 
     def check_grades_completed(self):
         for periods in self.grades.values():
@@ -137,26 +133,25 @@ class Student(User):
 
     def convert_grades(self, average):
         if average >= 98:
-            grade = 1.00
+            return 1.00
         elif 97 <= average >= 95:
-            grade = 1.25
+            return 1.25
         elif 94 <= average >= 92:
-            grade = 1.50
+            return 1.50
         elif 91 <= average >= 90:
-            grade = 1.75
+            return 1.75
         elif 89 <= average >= 88:
-            grade = 2.00
+            return 2.00
         elif 87 <= average >= 85:
-            grade = 2.25
+            return 2.25
         elif 84 <= average >= 82:
-            grade = 2.50
+            return 2.50
         elif 81 <= average >= 80:
-            grade = 2.75
+            return 2.75
         elif 79 <= average >= 75:
-            grade = 3.00
+            return 3.00
         else:
-            grade = 5.00
-        return grade
+            return 5.00
 
     def compute_gwa(self):
         if self.check_grades_completed():
@@ -220,13 +215,13 @@ class Student(User):
             print("[5] Apply for Scholarship")
             # print("[6] Add Subject")
             # print("[7] Drop Subject")
-            print("[8] Change Password")
+            print("[6] Change Password")
             print("[0] Logout")
-            menu_option = input("Choose a menu option [1, 2, 3, 4, 5, 6, 7, 8, 0]: ")
+            menu_option = input("Choose a menu option [1, 2, 3, 4, 5, 6, 0]: ")
             print()
 
             if menu_option == "1":
-                print(self.view_subjects())
+                self.view_subjects()
 
             elif menu_option == "2":
                 self.calculate_subject_averages()
@@ -270,7 +265,7 @@ class Student(User):
             #     else:
             #         print("Subject not found.")
 
-            elif menu_option == "8":
+            elif menu_option == "6":
                 self.change_password()
 
             elif menu_option == "0":

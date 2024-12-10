@@ -14,7 +14,7 @@ class Profile:
         self.setup_status = False
 
     def setupProfile(self):
-        if self.setup_status == False:
+        if not self.setup_status:
             print("Set Up your Profile:\n\n")
 
             # Setting up user's Profile
@@ -98,7 +98,7 @@ class Profile:
                 mobile_number = input("Mobile Number: ")
                 if not mobile_number:
                     break
-                elif mobile_number.isnumeric() == True and len(mobile_number) == 11:
+                elif mobile_number.isnumeric() and len(mobile_number) == 11:
                     self.mobile_number = mobile_number
                     break
                 else:
@@ -173,7 +173,7 @@ class Profile:
             elif choice == "4":
                 while True:
                     mobile_number = input("Mobile Number : ")
-                    if mobile_number.isnumeric() == True and len(mobile_number) == 11:
+                    if mobile_number.isnumeric() and len(mobile_number) == 11:
                         self.mobile_number = mobile_number
                         break
                     else:

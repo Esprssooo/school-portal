@@ -16,7 +16,7 @@ class Section:
         if self.students:
             student_list = f"{self.section_name} students:"
             for student in self.students:
-                student_list += f"\n  {student.last_name}, {student.first_name}"
+                student_list += f"\n  [{student.student_id}] {student.last_name}, {student.first_name}"
             return student_list
         else:
             return "No students enrolled."
