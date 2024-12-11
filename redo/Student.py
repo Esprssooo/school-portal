@@ -60,9 +60,9 @@ class Student(User):
                 subject_tuition = subject.get_units() * subject.get_tuition()
                 total_tuition += subject_tuition
             if self.__scholarship:
-                self.__balance = self.__scholarship.deduct_tuition(total_tuition)
+                self.__balance = round(self.__scholarship.deduct_tuition(total_tuition))
             else:
-                self.__balance = total_tuition
+                self.__balance = round(total_tuition, 2)
         else:
             print("No subjects enrolled. Add subjects first.")
 
